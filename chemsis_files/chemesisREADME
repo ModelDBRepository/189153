@@ -1,0 +1,12 @@
+place the chemesis2.6.tgz file into your genesis-2.4 directory.  I.e., when you downloaded and installed genesis-2.4, it created
+genesis-2.4/genesis
+after moving chemesis2.6.tgz into genesis-2.4, then
+ls genesis-2.4/ shows
+chemesis2.6.tgz genesis 
+extract the files by typing:
+tar -xzf chemesis2.6.tgz
+then  "ls genesis-2.4/" shows
+chan  chemesis2.6.tgz  chemesisREADME  genesis  Makefile
+then type "make" (though you might have to edit the Makefile if you changed the default linux installation in your genesis-2.4 Makefile)
+This will create and a few chemesis objects that did not get distributed with genesis2.4.  The most important one is caplas_synchan, which implements a calcium dependent plasticity channel.
+
