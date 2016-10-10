@@ -1,211 +1,114 @@
-import numpy as np
-import calculate_weight as cw
-import matplotlib.pyplot as plt
-import distance as dst
-import figure_formating as ff
-fnames = [
-    
-    #[
-       
-        # [
-        #     'Fino_UI_Post_tertdend1_1_randseed_5757538_high_res_tonic_gaba_gaba_delay_0.015__tertdend1_1_GABAtau20.08075_Stim_tertdend1_1_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_2_randseed_5757538_high_res_tonic_gaba_gaba_delay_0.015__tertdend1_2_GABAtau20.08075_Stim_tertdend1_2_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_3_randseed_5757538_high_res_tonic_gaba_gaba_delay_0.015__tertdend1_3_GABAtau20.08075_Stim_tertdend1_3_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_4_randseed_5757538_high_res_tonic_gaba_gaba_delay_0.015__tertdend1_4_GABAtau20.08075_Stim_tertdend1_4_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_5_randseed_5757538_high_res_tonic_gaba_gaba_delay_0.015__tertdend1_5_GABAtau20.08075_Stim_tertdend1_5_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_6_randseed_5757538_high_res_tonic_gaba_gaba_delay_0.015__tertdend1_6_GABAtau20.08075_Stim_tertdend1_6_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_8_randseed_5757538_high_res_tonic_gaba_gaba_delay_0.015__tertdend1_8_GABAtau20.08075_Stim_tertdend1_8_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_10_randseed_5757538_high_res_tonic_gaba_gaba_delay_0.015__tertdend1_10_GABAtau20.08075_Stim_tertdend1_10_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_11_randseed_5757538_high_res_tonic_gaba_gaba_delay_0.015__tertdend1_11_GABAtau20.08075_Stim_tertdend1_11_AP_1_ISI_-0.04_spine_plasticity.txt',
-            
-        # ],
-        # [
-        #     'Fino_UI_Pre_tertdend1_1_randseed_5757538_high_res_tonic_gaba_gaba_delay_0.015__tertdend1_1_GABAtau20.08075_Stim_tertdend1_1_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_2_randseed_5757538_high_res_tonic_gaba_gaba_delay_0.015__tertdend1_2_GABAtau20.08075_Stim_tertdend1_2_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_3_randseed_5757538_high_res_tonic_gaba_gaba_delay_0.015__tertdend1_3_GABAtau20.08075_Stim_tertdend1_3_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_4_randseed_5757538_high_res_tonic_gaba_gaba_delay_0.015__tertdend1_4_GABAtau20.08075_Stim_tertdend1_4_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_5_randseed_5757538_high_res_tonic_gaba_gaba_delay_0.015__tertdend1_5_GABAtau20.08075_Stim_tertdend1_5_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_6_randseed_5757538_high_res_tonic_gaba_gaba_delay_0.015__tertdend1_6_GABAtau20.08075_Stim_tertdend1_6_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_8_randseed_5757538_high_res_tonic_gaba_gaba_delay_0.015__tertdend1_8_GABAtau20.08075_Stim_tertdend1_8_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_10_randseed_5757538_high_res_tonic_gaba_gaba_delay_0.015__tertdend1_10_GABAtau20.08075_Stim_tertdend1_10_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_11_randseed_5757538_high_res_tonic_gaba_gaba_delay_0.015__tertdend1_11_GABAtau20.08075_Stim_tertdend1_11_AP_1_ISI_0.04_spine_plasticity.txt',
-        # ]
-        
-    ['Fino_Post_gaba.txt','Fino_Pre_gaba.txt'],
-    #],
-    #[
-    ['Fino_Post_phasic.txt','Fino_Pre_phasic.txt'],
-        # [
-
-        #     'Fino_UI_Post_tertdend1_1_randseed_5757538_high_res_gaba_delay_0.015__tertdend1_1_GABAtau20.08075_Stim_tertdend1_1_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_2_randseed_5757538_high_res_gaba_delay_0.015__tertdend1_2_GABAtau20.08075_Stim_tertdend1_2_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_3_randseed_5757538_high_res_gaba_delay_0.015__tertdend1_3_GABAtau20.08075_Stim_tertdend1_3_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_4_randseed_5757538_high_res_gaba_delay_0.015__tertdend1_4_GABAtau20.08075_Stim_tertdend1_4_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_5_randseed_5757538_high_res_gaba_delay_0.015__tertdend1_5_GABAtau20.08075_Stim_tertdend1_5_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_6_randseed_5757538_high_res_gaba_delay_0.015__tertdend1_6_GABAtau20.08075_Stim_tertdend1_6_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_8_randseed_5757538_high_res_gaba_delay_0.015__tertdend1_8_GABAtau20.08075_Stim_tertdend1_8_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_10_randseed_5757538_high_res_gaba_delay_0.015__tertdend1_10_GABAtau20.08075_Stim_tertdend1_10_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_11_randseed_5757538_high_res_gaba_delay_0.015__tertdend1_11_GABAtau20.08075_Stim_tertdend1_11_AP_1_ISI_-0.04_spine_plasticity.txt',
-        # ],
-        # [
-            
-        #     'Fino_UI_Pre_tertdend1_1_randseed_5757538_high_res_gaba_delay_0.015__tertdend1_1_GABAtau20.08075_Stim_tertdend1_1_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_2_randseed_5757538_high_res_gaba_delay_0.015__tertdend1_2_GABAtau20.08075_Stim_tertdend1_2_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_3_randseed_5757538_high_res_gaba_delay_0.015__tertdend1_3_GABAtau20.08075_Stim_tertdend1_3_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_4_randseed_5757538_high_res_gaba_delay_0.015__tertdend1_4_GABAtau20.08075_Stim_tertdend1_4_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_5_randseed_5757538_high_res_gaba_delay_0.015__tertdend1_5_GABAtau20.08075_Stim_tertdend1_5_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_6_randseed_5757538_high_res_gaba_delay_0.015__tertdend1_6_GABAtau20.08075_Stim_tertdend1_6_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_8_randseed_5757538_high_res_gaba_delay_0.015__tertdend1_8_GABAtau20.08075_Stim_tertdend1_8_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_10_randseed_5757538_high_res_gaba_delay_0.015__tertdend1_10_GABAtau20.08075_Stim_tertdend1_10_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_11_randseed_5757538_high_res_gaba_delay_0.015__tertdend1_11_GABAtau20.08075_Stim_tertdend1_11_AP_1_ISI_0.04_spine_plasticity.txt',
-        # ]
-   # ],
-    #[
-        # [
-        #     'Fino_UI_Post_tertdend1_1_randseed_5757538_high_res_tonic_gaba_no_gaba_Stim_tertdend1_1_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_2_randseed_5757538_high_res_tonic_gaba_no_gaba_Stim_tertdend1_2_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_3_randseed_5757538_high_res_tonic_gaba_no_gaba_Stim_tertdend1_3_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_4_randseed_5757538_high_res_tonic_gaba_no_gaba_Stim_tertdend1_4_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_5_randseed_5757538_high_res_tonic_gaba_no_gaba_Stim_tertdend1_5_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_6_randseed_5757538_high_res_tonic_gaba_no_gaba_Stim_tertdend1_6_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_8_randseed_5757538_high_res_tonic_gaba_no_gaba_Stim_tertdend1_8_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_10_randseed_5757538_high_res_tonic_gaba_no_gaba_Stim_tertdend1_10_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_11_randseed_5757538_high_res_tonic_gaba_no_gaba_Stim_tertdend1_11_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     ],
-        # [
-        #     'Fino_UI_Pre_tertdend1_1_randseed_5757538_high_res_tonic_gaba_no_gaba_Stim_tertdend1_1_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_2_randseed_5757538_high_res_tonic_gaba_no_gaba_Stim_tertdend1_2_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_3_randseed_5757538_high_res_tonic_gaba_no_gaba_Stim_tertdend1_3_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_4_randseed_5757538_high_res_tonic_gaba_no_gaba_Stim_tertdend1_4_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_5_randseed_5757538_high_res_tonic_gaba_no_gaba_Stim_tertdend1_5_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_6_randseed_5757538_high_res_tonic_gaba_no_gaba_Stim_tertdend1_6_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_8_randseed_5757538_high_res_tonic_gaba_no_gaba_Stim_tertdend1_8_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_10_randseed_5757538_high_res_tonic_gaba_no_gaba_Stim_tertdend1_10_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_11_randseed_5757538_high_res_tonic_gaba_no_gaba_Stim_tertdend1_11_AP_1_ISI_0.04_spine_plasticity.txt',
-            
-        # ]
-    ['Fino_Post_tonic.txt','Fino_Pre_tonic.txt']
-        ,
-    #],
-    #[
-        # [
-        #     'Fino_UI_Post_tertdend1_1_randseed_5757538_high_res_no_gaba_Stim_tertdend1_1_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_2_randseed_5757538_high_res_no_gaba_Stim_tertdend1_2_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_3_randseed_5757538_high_res_no_gaba_Stim_tertdend1_3_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_4_randseed_5757538_high_res_no_gaba_Stim_tertdend1_4_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_5_randseed_5757538_high_res_no_gaba_Stim_tertdend1_5_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_6_randseed_5757538_high_res_no_gaba_Stim_tertdend1_6_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_8_randseed_5757538_high_res_no_gaba_Stim_tertdend1_8_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_10_randseed_5757538_high_res_no_gaba_Stim_tertdend1_10_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     'Fino_UI_Post_tertdend1_11_randseed_5757538_high_res_no_gaba_Stim_tertdend1_11_AP_1_ISI_-0.04_spine_plasticity.txt',
-        #     ],
-        # [
-        #     'Fino_UI_Pre_tertdend1_1_randseed_5757538_high_res_no_gaba_Stim_tertdend1_1_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_2_randseed_5757538_high_res_no_gaba_Stim_tertdend1_2_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_3_randseed_5757538_high_res_no_gaba_Stim_tertdend1_3_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_4_randseed_5757538_high_res_no_gaba_Stim_tertdend1_4_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_5_randseed_5757538_high_res_no_gaba_Stim_tertdend1_5_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_6_randseed_5757538_high_res_no_gaba_Stim_tertdend1_6_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_8_randseed_5757538_high_res_no_gaba_Stim_tertdend1_8_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_10_randseed_5757538_high_res_no_gaba_Stim_tertdend1_10_AP_1_ISI_0.04_spine_plasticity.txt',
-        #     'Fino_UI_Pre_tertdend1_11_randseed_5757538_high_res_no_gaba_Stim_tertdend1_11_AP_1_ISI_0.04_spine_plasticity.txt',
-            
-        # ]
-    ['Fino_Post_weights.txt','Fino_0.04_Pre_weights.txt']
-    #]
-    
-]
-
-gain_pot = 1100
-gain_dep = 4500
-post_thresh_hi = .46e-3
-post_thresh_lo = .2e-3
-depr_len = 0.032
-pot_len = 0.002
-col = 5
-
-shape_line = ['--','-']
-shape_symbol = ['d','^']
-labels = [r'$\mathrm{GABA_A}$ present',r'phasic $\mathrm{GABA_A}$',r'tonic $\mathrm{GABA_A}$','ctrl']
-shape = [':','-.','--','-']
-
-titles = [r'A1. Duration(Ca$>\mathrm{T_{LTP}})$', r'A2. Duration(Ca$>\mathrm{T_{LTP}})$', r'B1. Duration$(\mathrm{T_{LTD}}<$Ca$<\mathrm{T_{LTP}})$', r'B2. Duration$(\mathrm{T_{LTD}}<$Ca$<\mathrm{T_{LTP}})$', r'C1. Weight', r'C2. Weight' ]
-fnams = ['Fino_Post_gaba','Fino_Pre_gaba','Fino_Post_phasic','Fino_Pre_phasic','Fino_Post_tonic','Fino_Pre_tonic','Fino_Post_ctrl','Fino_Pre_ctrsl']
-
-if __name__ == '__main__':
-
-    fig = plt.figure(figsize=(6.7,8))
-    ax = []
-
-    for i in range(6):
-        ax.append(fig.add_subplot(3,2,i+1))
-    # twax = []
-    # for i in range(3):
-    #     twax.append(ax[i*2].twinx())
-
-    for k,fnames_list in enumerate(fnames):
-       
-        for j,fname_list in  enumerate(fnames_list):
-            print fname_list
-            if isinstance(fname_list,str):
-                f = open(fname_list)
-                header = f.readline()
-                dat = np.loadtxt(f)
-            else:
-                syns = cw.go(fname_list,gain_pot,gain_dep,post_thresh_hi,post_thresh_lo,depr_len,pot_len,st=0.5)
-                dat = np.zeros((len(syns),col))
-
-                new_syns = [syn[0] for syn in syns]
-                for i,syn in enumerate(new_syns):
-            
-                    dat[i,0] = dst.dist(syn.fname)
-                    dat[i,1] = syn.weight[-1]
-                    dat[i,2] = max(syn.Ca)
-                    dat[i,3],dat[i,4] = dst.duration(syn.Ca,syn.dt)
-                    print syn.weight[-1]
-                np.savetxt(fnams[2*k+j]+'.txt',dat,header="distance weight ca tltp tltd",comments='')            
-                print fnams[2*k+j]+'.txt'
-            if j%2: #Pre-Post
-                ax[0].plot(dat[:,0],1000*dat[:,3],shape[k],color='k',label=labels[k])
-                ax[2].plot(dat[:,0],1000*dat[:,4],shape[k],color='k',label=labels[k])
-                ax[4].plot(dat[:,0],dat[:,1],shape[k],color='k',label=labels[k])
-
-            else:
-                ax[1].plot(dat[:,0],1000*dat[:,3],shape[k],color='k',label=labels[k])
-                ax[3].plot(dat[:,0],1000*dat[:,4],shape[k],color='k',label=labels[k])
-                ax[5].plot(dat[:,0],dat[:,1],shape[k],color='k',label=labels[k])
-
+//*************** Parameters to control model (p file, spinesYesNo) and simulations
+str 	neuronname = "/cell"
+str     pfile="MScell/MScelltaperspines.p"     //"MScell/MScellTest.p"       //
+float   outputclock=2e-4  //output time step (Sec)
+float   simdt=5e-6        // Simulation time step (Second) 
+int     spinesYesNo=1
+int     synYesNo=1
+str 	DA="UI"
+str     whichSpines = "1,2,3"
+float   initSim = 0.9
+int TooFast = 30 //what is the frequency that results in depletion of synaptic vesicles
+//Parameters for learning rule
+int     plastYesNo = 1
+float   post_thresh_hi = .46e-3 //0.5 
+float   post_thresh_lo = 0.2e-3  //0.2
+float   dur_hi = 2.e-3 //
+float   dur_lo = .032  //0.2
+//whether to elicit and single pulses before and after plasticity protocol
+int pulseYN=0
+int desensYesNo=0
+str facchan="/cell/desens"
+int GABAYesNo = 0
+// phasic GABA switch
+int GABAtonic =  0//tonic GABA switch
+str GABAstim = "tertdend1_1"
+//Parameters for current injection for IV/IF curves
+str input_name = "spine_stim"
+float SMALLNUMBER=1e-15
+str precell="/othercell"
+//Parameters for current injection for IV/IF curves
+str injectName="/injectCurr"
+float injectstart=-300e-12 //1e-9
+float inc=100e-12          //20e-12
+float delay=0.1
+float duration=0.25       //0.005
+int numcurr=7
+float basal_current=0
+//parameters for current injection to produce AP during upstate or STDP
+float upstate_time = 0.3
+float AP_durtime = 0.005 //duration of AP depolarization at soma, 5 ms
+//parameters for synaptic stimulation
+int tertdendstart=1
+int tertdendsegstart=1
+str stimcomp
+str multispinefile
+str multispinehead
+//output files.  Xfile is name of ascii object and suffix for filename
+//Xhead is the header written to the file
+//Vm output is required, Gk and Ca are optional
+str Vmfile="Vm"
+if ({plastYesNo})
+    Vmfile = {Vmfile}@"_plasticity"
+end
+str Vmhead
+int CaOut=1
+str Cafile
+str Cahead
+int GkOut=0
+str Gkfile
+str Gkhead
+str spinefile
+str spinehead
+str presynfile
+str somainjfile = "somaInj"
+//list of compartments, channels and calcium objects for output, comma separated
+str comps="soma,primdend1,secdend11,tertdend1_1,tertdend1_2,tertdend1_3,tertdend1_4,tertdend1_5,tertdend1_6,tertdend1_7" //These should include comps of stim spines to see NMDA
+str chans="CaL12_channel,CaL13_channel,CaR_channel"
+//these must match the calcium type, i.e. pools for type 1 and CaMN, etc for type 0
+str CaBufs="X"//"CaMN,CaMC,calbindin"//"Ca_pool_LT,Ca_pool_NR,Ca_pool_all,Ca_pool_nmda" // X = just calcium, no buffers
+    //***********input rates for Glutamate, and durations when doing a gradient.
+    //most of these values should be passed in as parameters or declared in SimParams
+    //make the secondRate and thirdRate = first rate when second_time and third_time = 0
+//*rates used for gradient and flat inputs, multiply by 10
+//18: high=*50, med=*3, low=*1, gaba=*7
+//19: high=*40, med=*5, low=*2, gaba=*7
+//flat: rate=*4 gaba=*7
+float first_time = 0.01
+float second_time  = 0.2
+int Rate1
+int Rate2
+int Rate3
+int GabaRate=70
+create table APtime
+int  xmax=7
+call  APtime  TABCREATE 7 0 7
+setfield APtime table->table[0] 0.005 \
+                table->table[1] 0.010 \
+                table->table[2] 0.020 \
+                table->table[3] 0.030 \
+                table->table[4] 0.050 \
+                table->table[5] 0.100 \
+                table->table[6] 0.175 \
+                table->table[7] 0.290 
+//From STDP files:
+//1: high=*50, med =*1, low =/1.5, gaba = *2
+//2: high=*40, med =*1, low =/1.5, gaba = *2
+//3: high=*40, med =*1, low =/1.5, gaba = *3
+//*****4: high=*40, med =*1, low =/1.5, gaba = *4
+//5: high=*60, med =/2, low =/5, gaba = *4
+//6: high=*30, med =*1, low =/1.5, gaba = *4
  
                 
-
-
-    ax[4].set_xlabel(r'Distance from soma ($\mu$m)')
-    ax[5].set_xlabel(r'Distance from soma ($\mu$m)')
-    ax[0].set_ylabel(r'Time (ms)')
-    ax[1].set_ylabel(r'Time (ms)')
-    ax[2].set_ylabel(r'Time (ms)')
-    ax[3].set_ylabel(r'Time (ms)')
-    ax[4].set_ylabel('Weight')
-    ax[5].set_ylabel('Weight')
-    ax[2].legend(frameon=False,handlelength=3)
-    ax[0].set_ylim([0,140])
-    ax[1].set_ylim([0,140])
-    ax[2].set_ylim([60,150])
-    ax[3].set_ylim([60,150])
-    
-    #ax[2].legend(frameon=False)
-    for i,x in enumerate(ax):
-      
-        ff.add_title(x,titles[i])
-        ff.simpleaxis(x)
-    fig.subplots_adjust(wspace=.55)
-    fig.subplots_adjust(hspace=.4)
-    lim = ax[0].get_xlim()
-    lim_y_pre = ax[0].get_ylim()[-1]
-    lim_y_post= ax[1].get_ylim()[-1]
-    ax[0].text(lim[0]+lim[-1]/5,lim_y_pre/4.*5,'Pre then Post',fontsize=14)
-    ax[1].text(lim[0]+lim[-1]/5,lim_y_post/4.*5,'Post then Pre',fontsize=14)
-    plt.savefig('Fig_5.png',format='png', bbox_inches='tight',pad_inches=0.1)
-    plt.savefig('Fig_5.svg',format='svg', bbox_inches='tight',pad_inches=0.1)
-    plt.show()
-                    
+ 
+/* Three variations for stimulation in PlasStim
+a. PreStim=0 indicates stimulate a single compartment,
+    second parameter must be name of compartment
+b. PreStim between 0 and 1.0 indicates stimulate a percentage
+    of glutamate synapses.  The PreStim value is treated as percent.
+    in this case, StimComp should be either
+    b1. "any", meaning stimulate a percentage of _any_ compartments, or
+    b2. a value indicating minimum distance from soma for stimulation.
+        of course, setting a value = 0 is the same as "any"
+Same variations plus one more for stimulation in STDP
+If PreStim <= 0, no stim, only AP*/
